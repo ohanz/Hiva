@@ -6,7 +6,7 @@ import '../../../app/extensions/size_extension.dart';
 import '../../../app/size_config.dart';
 import 'home_model.dart';
 
-@RoutePage() // ← This is critical
+@RoutePage()
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
 
@@ -22,111 +22,114 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig.init(context); // ✅ Correct usage for static methods
+    SizeConfig.init(context);
 
     return Consumer<HomeModel>(
       builder: (context, model, child) {
         return Scaffold(
           backgroundColor: Colors.grey[200],
-          body: Padding(
-            padding: EdgeInsets.only(top: 6.height),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  'Hive Inventory',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Lato',
-                  ),
-                ),
-                SizedBox(
-                  height: 90.height,
-                  child: ListView.builder(
-                    itemCount: 3, // Replace with model.items.length
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: EdgeInsets.symmetric(
-                          vertical: 2.height,
-                          horizontal: 4.5.width,
-                        ),
-                        height: 13.height,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.only(left: 2.width),
-                              width: 16.width,
-                              decoration: BoxDecoration(
-                                color: Colors.green[600],
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Center(
-                                child: Icon(
-                                  Icons.home,
-                                  color: Colors.white,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(top: 6.height),
+                child: Column(
+                  children: <Widget>[
+                    const Text(
+                      'Hive Inventory',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Lato',
+                      ),
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: 3, // TODO: replace with model.items.length
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: EdgeInsets.symmetric(
+                            vertical: 2.height,
+                            horizontal: 4.5.width,
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 2.height), // instead of fixed height
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(left: 2.width),
+                                width: 16.width,
+                                decoration: BoxDecoration(
+                                  color: Colors.green[600],
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.home,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 3.height,
-                                horizontal: 3.width,
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 3.height,
+                                  horizontal: 3.width,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: const <Widget>[
+                                    Text(
+                                      'Name', // TODO: display model.items[index].name
+                                      style: TextStyle(
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      'Description', // TODO: display model.items[index].description
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const <Widget>[
-                                  Text(
-                                    'Name',
-                                    style: TextStyle(
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
-                                    ),
+                              const Spacer(),
+                              PopupMenuButton<String>(
+                                onSelected: (item) {
+                                  if (item == 'update') {
+                                    nameController.text = 'update name'; // TODO: use real value
+                                    descriptionController.text = 'update description'; // TODO: use real value
+                                    inputItemDialog(context, 'update', index);
+                                  } else if (item == 'delete') {
+                                    // TODO: model.deleteItem(index);
+                                  }
+                                },
+                                itemBuilder: (context) => const [
+                                  PopupMenuItem(
+                                    value: 'update',
+                                    child: Text('Update'),
                                   ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    'Description',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 14,
-                                    ),
+                                  PopupMenuItem(
+                                    value: 'delete',
+                                    child: Text('Delete'),
                                   ),
                                 ],
                               ),
-                            ),
-                            const Spacer(),
-                            PopupMenuButton<String>(
-                              onSelected: (item) {
-                                if (item == 'update') {
-                                  nameController.text = 'update name';
-                                  descriptionController.text = 'update description';
-                                  inputItemDialog(context, 'update', index);
-                                } else if (item == 'delete') {
-                                  // TODO: handle delete
-                                }
-                              },
-                              itemBuilder: (context) => const [
-                                PopupMenuItem(
-                                  value: 'update',
-                                  child: Text('Update'),
-                                ),
-                                PopupMenuItem(
-                                  value: 'delete',
-                                  child: Text('Delete'),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
           floatingActionButton: FloatingActionButton(
@@ -149,77 +152,70 @@ class _HomeViewState extends State<HomeView> {
       context: context,
       builder: (context) {
         return Dialog(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 40),
-            height: 45.height,
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      action == 'add' ? 'Add Item' : 'Update Item',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: nameController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Item name cannot be empty';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        labelText: 'Item name',
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: descriptionController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Item description cannot be empty';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        labelText: 'Item description',
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          if (action == 'add') {
-                            // TODO: Add item to model
-                            // inventoryDb.addItem(nameController.text, descriptionController.text);
-                          } else {
-                            // TODO: Update item in model
-                            // inventoryDb.updateItem(index!, nameController.text, descriptionController.text);
-                          }
-
-                          nameController.clear();
-                          descriptionController.clear();
-                          Navigator.pop(context);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green[600],
-                      ),
-                      child: Text(
-                        action == 'add' ? 'Add' : 'Update',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                  ],
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: constraints.maxHeight * 0.9,
                 ),
-              ),
-            ),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(
+                          action == 'add' ? 'Add Item' : 'Update Item',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          controller: nameController,
+                          validator: (value) =>
+                          (value == null || value.isEmpty) ? 'Item name cannot be empty' : null,
+                          decoration: const InputDecoration(labelText: 'Item name'),
+                        ),
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          controller: descriptionController,
+                          validator: (value) =>
+                          (value == null || value.isEmpty) ? 'Item description cannot be empty' : null,
+                          decoration: const InputDecoration(labelText: 'Item description'),
+                        ),
+                        const SizedBox(height: 30),
+                        ElevatedButton(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              if (action == 'add') {
+                                // TODO: inventoryDb.addItem(nameController.text, descriptionController.text);
+                              } else {
+                                // TODO: inventoryDb.updateItem(index!, nameController.text, descriptionController.text);
+                              }
+
+                              nameController.clear();
+                              descriptionController.clear();
+                              Navigator.pop(context);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green[600],
+                          ),
+                          child: Text(
+                            action == 'add' ? 'Add' : 'Update',
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
         );
       },
