@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart'; // ✅ REQUIRED
 
 import 'package:provider/provider.dart';
 
+import 'UI/views/home/home_model.dart';
 import 'app/models/inventory_item.dart';
 import 'app/provider_list.dart';
 import 'app/router.dart'; // ✅ only this, not .gr.dart
@@ -18,6 +19,9 @@ Future<void> main() async {
 
   // Open your inventory box (box name: 'inventory')
   await Hive.openBox<InventoryItem>('inventory');
+
+  final homeModel = HomeModel();
+  await homeModel.loadData(); // 👈 Load and seed if empty
 
   runApp(MyApp());
 }

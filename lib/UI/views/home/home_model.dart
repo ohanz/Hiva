@@ -7,6 +7,20 @@ class HomeModel extends ChangeNotifier {
 
   List<InventoryItem> get items => _inventoryBox.values.toList();
 
+  Future<void> loadData() async {
+    // 🔽 Add dummy data if box is empty
+    if (_inventoryBox.isEmpty) {
+      _inventoryBox.addAll([
+        InventoryItem(name: 'Laptop', description: 'HyeBook Pro V1'),
+        InventoryItem(name: 'Laptop', description: 'MacBook Pro M1'),
+        InventoryItem(name: 'Phone', description: 'Samsung Galaxy S23'),
+        InventoryItem(name: 'Desk', description: 'Wooden work desk'),
+      ]);
+    }
+
+    notifyListeners(); // Important to trigger UI
+  }
+
   void addItem(String name, String description) {
     final newItem = InventoryItem(name: name, description: description);
     _inventoryBox.add(newItem);
