@@ -134,6 +134,17 @@ class _HomeViewState extends State<HomeView> {
                         );
                       },
                     ),
+                    const SizedBox(height: 30),
+                    Text(
+                      'Created with ❤️ by Ohanz',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
                   ],
                 ),
               ),
