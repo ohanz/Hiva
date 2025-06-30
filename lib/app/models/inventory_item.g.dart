@@ -19,17 +19,20 @@ class InventoryItemAdapter extends TypeAdapter<InventoryItem> {
     return InventoryItem(
       name: fields[0] as String,
       description: fields[1] as String,
+      category: fields[2] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, InventoryItem obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
-      ..write(obj.description);
+      ..write(obj.description)
+      ..writeByte(2)
+      ..write(obj.category);
   }
 
   @override

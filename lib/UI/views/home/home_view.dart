@@ -20,6 +20,7 @@ class _HomeViewState extends State<HomeView> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   TextEditingController searchController = TextEditingController();
+  String selectedCategory = 'General'; // or any default
 
   @override
   void initState() {
@@ -316,6 +317,30 @@ class _HomeViewState extends State<HomeView> {
                       decoration: const InputDecoration(labelText: 'Item description'),
                     ),
                     const SizedBox(height: 30),
+                    DropdownButtonFormField<String>(
+                      value: selectedCategory,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedCategory = value!;
+                        });
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Category',
+                      ),
+                      items: [
+                        'General',
+                        'Electronics',
+                        'Furniture',
+                        'Books',
+                        'Food',
+                      ].map((category) {
+                        return DropdownMenuItem<String>(
+                          value: category,
+                          child: Text(category),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
@@ -323,12 +348,14 @@ class _HomeViewState extends State<HomeView> {
                             model.addItem(
                               nameController.text,
                               descriptionController.text,
+                              selectedCategory,
                             );
                           } else {
                             model.updateItem(
                               index!,
                               nameController.text,
                               descriptionController.text,
+                              selectedCategory,
                             );
                           }
 

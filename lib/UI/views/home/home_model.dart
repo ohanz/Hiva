@@ -13,25 +13,25 @@ class HomeModel extends ChangeNotifier {
     // 🔽 Add dummy data if box is empty
     if (_inventoryBox.isEmpty) {
       _inventoryBox.addAll([
-        InventoryItem(name: 'Laptop', description: 'HyeBook Pro V1'),
-        InventoryItem(name: 'Laptop', description: 'MacBook Pro M1'),
-        InventoryItem(name: 'Phone', description: 'Samsung Galaxy S23'),
-        InventoryItem(name: 'Desk', description: 'Wooden work desk'),
+        InventoryItem(name: 'Laptop', description: 'HyeBook Pro V1', category: 'Electronics'),
+        InventoryItem(name: 'Laptop', description: 'MacBook Pro M1', category: 'Electronics'),
+        InventoryItem(name: 'Phone', description: 'Samsung Galaxy S23', category: 'Electronics'),
+        InventoryItem(name: 'Desk', description: 'Wooden work desk', category: 'Furniture'),
       ]);
     }
 
     notifyListeners(); // Important to trigger UI
   }
 
-  void addItem(String name, String description) {
-    final newItem = InventoryItem(name: name, description: description);
+  void addItem(String name, String description, String category) {
+    final newItem = InventoryItem(name: name, description: description, category: category);
     _inventoryBox.add(newItem);
     notifyListeners();
   }
 
-  void updateItem(int index, String name, String description) {
+  void updateItem(int index, String name, String description, String category) {
     final key = _inventoryBox.keyAt(index);
-    final updatedItem = InventoryItem(name: name, description: description);
+    final updatedItem = InventoryItem(name: name, description: description, category: category);
     _inventoryBox.put(key, updatedItem);
     notifyListeners();
   }

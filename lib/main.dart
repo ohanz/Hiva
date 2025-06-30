@@ -23,6 +23,10 @@ Future<void> main() async {
   final homeModel = HomeModel();
   await homeModel.loadData(); // 👈 Load and seed if empty
 
+
+  // final box = await Hive.openBox<InventoryItem>('inventory');
+  // await box.clear(); // 🚨 Clears everything in 'inventory' box
+
   runApp(MyApp());
 }
 

@@ -10,8 +10,12 @@ class InventoryItem extends HiveObject {
   @HiveField(1)
   String description;
 
+  @HiveField(2) // ✅ new field
+  String category;
+
   InventoryItem({
     required this.name,
     required this.description,
+    required this.category, // ✅ new parameter
   });
 }
