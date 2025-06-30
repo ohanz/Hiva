@@ -73,9 +73,20 @@ class _HomeViewState extends State<HomeView> {
                         ),
                       ),
                     )
+                        : model.filteredItems.isEmpty
+                        ? Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 40),
+                      child: Text(
+                        'No items found',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    )
                         : ListView.builder(
                       shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
+                      physics: NeverScrollableScrollPhysics(),
                       itemCount: model.filteredItems.length,
                       itemBuilder: (context, index) {
                         final item = model.filteredItems[index];
