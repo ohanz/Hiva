@@ -126,7 +126,21 @@ class _HomeViewState extends State<HomeView> {
                         },
                       ),
                     ),
-
+                    const SizedBox(height: 20),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4.5.width, vertical: 1.height),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '${model.filteredItems.length} item${model.filteredItems.length == 1 ? '' : 's'} found',
+                          style: TextStyle(
+                            fontSize: 4.text,
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 20),
                     model.items.isEmpty
                         ? Padding(
