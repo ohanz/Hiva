@@ -19,6 +19,21 @@ class _HomeViewState extends State<HomeView> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    searchController.addListener(() {
+      setState(() {}); // Refresh to show/hide clear icon  | Just rebuild to update suffixIcon
+    });
+  }
+  //And don’t forget to dispose it:
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +58,22 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Padding(
+                    Padding( // Search Area
                       padding: EdgeInsets.symmetric(horizontal: 4.width, vertical: 2.height),
                       child: TextField(
+                        controller: searchController,
                         decoration: InputDecoration(
                           hintText: 'Search items...',
                           prefixIcon: Icon(Icons.search),
+                          suffixIcon: searchController.text.isNotEmpty
+                              ? IconButton(
+                            icon: Icon(Icons.clear),
+                            onPressed: () {
+                              searchController.clear();
+                              Provider.of<HomeModel>(context, listen: false).searchQuery = '';
+                            },
+                          )
+                              : null,
                           filled: true,
                           fillColor: Colors.white,
                           border: OutlineInputBorder(
@@ -56,8 +81,9 @@ class _HomeViewState extends State<HomeView> {
                             borderSide: BorderSide.none,
                           ),
                         ),
-                        onChanged: (value) =>
-                        Provider.of<HomeModel>(context, listen: false).searchQuery = value,
+                        onChanged: (value) {
+                          Provider.of<HomeModel>(context, listen: false).searchQuery = value;
+                        },
                       ),
                     ),
                     const SizedBox(height: 20),
