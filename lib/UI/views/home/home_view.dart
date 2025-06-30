@@ -41,6 +41,10 @@ class _HomeViewState extends State<HomeView> {
 
     return Consumer<HomeModel>(
       builder: (context, model, child) {
+        final currentSort = model.sortType == SortType.az ? 'A–Z' : 'Z–A';
+        final query = model.searchQuery;
+
+
         return Scaffold(
           backgroundColor: Colors.grey[200],
           body: SafeArea(
@@ -91,8 +95,6 @@ class _HomeViewState extends State<HomeView> {
                       alignment: Alignment.centerRight,
                       child: Consumer<HomeModel>(
                         builder: (context, model, _) {
-                          final currentSort = model.sortType == SortType.az ? 'A–Z' : 'Z–A';
-
                           return Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -132,8 +134,11 @@ class _HomeViewState extends State<HomeView> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          '${model.filteredItems.length} item${model.filteredItems.length == 1 ? '' : 's'} found',
-                          style: TextStyle(
+                          // '${model.filteredItems.length} item${model.filteredItems.length == 1 ? '' : 's'} found',
+                          '${model.filteredItems.length} item${model.filteredItems.length == 1 ? '' : 's'} found'
+                              '${query.isNotEmpty ? ' · Filter: "$query"' : ''}'
+                              ' · Sorted $currentSort',
+                        style: TextStyle(
                             fontSize: 4.text,
                             color: Colors.grey[700],
                             fontWeight: FontWeight.w500,

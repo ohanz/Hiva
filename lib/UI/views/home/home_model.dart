@@ -44,6 +44,7 @@ class HomeModel extends ChangeNotifier {
 
 
   String _searchQuery = '';
+  String get searchQuery => _searchQuery; // ✅ Add this line
 
   set searchQuery(String value) {
     _searchQuery = value.toLowerCase();
