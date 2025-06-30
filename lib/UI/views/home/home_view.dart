@@ -43,13 +43,32 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
                     const SizedBox(height: 20),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4.width, vertical: 2.height),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search items...',
+                          prefixIcon: Icon(Icons.search),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        onChanged: (value) =>
+                        Provider.of<HomeModel>(context, listen: false).searchQuery = value,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
                     model.items.isEmpty
                         ? Padding(
                       padding: const EdgeInsets.symmetric(vertical: 50),
                       child: Text(
                         'No items yet. Tap + to add one!',
                         style: TextStyle(
-                          color: Colors.grey[600],
+                          color: Colors.black,
+                          // color: Colors.grey[600],
                           fontSize: 16,
                         ),
                       ),
@@ -57,9 +76,12 @@ class _HomeViewState extends State<HomeView> {
                         : ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: model.items.length,
+                      itemCount: model.filteredItems.length,
                       itemBuilder: (context, index) {
-                        final item = model.items[index];
+                        final item = model.filteredItems[index];
+                        // itemCount: model.items.length,
+                      // itemBuilder: (context, index) {
+                      //   final item = model.items[index];
 
                         return Container(
                           margin: EdgeInsets.symmetric(
@@ -152,7 +174,8 @@ class _HomeViewState extends State<HomeView> {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () => inputItemDialog(context, 'add'),
-            child: Icon(Icons.add, color: Colors.white, size: 8.width),
+            child: Icon(Icons.add, color: Colors.green, size: 8.width),
+            // child: Icon(Icons.add, color: Colors.white, size: 8.width),
           ),
         );
       },

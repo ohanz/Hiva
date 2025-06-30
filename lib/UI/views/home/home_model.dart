@@ -39,4 +39,22 @@ class HomeModel extends ChangeNotifier {
     _inventoryBox.delete(key);
     notifyListeners();
   }
+
+
+  String _searchQuery = '';
+
+  set searchQuery(String value) {
+    _searchQuery = value.toLowerCase();
+    notifyListeners();
+  }
+
+  List<InventoryItem> get filteredItems {
+    if (_searchQuery.isEmpty) return items;
+    return items.where((item) {
+      return item.name.toLowerCase().contains(_searchQuery) ||
+          item.description.toLowerCase().contains(_searchQuery);
+    }).toList();
+  }
+
+
 }
