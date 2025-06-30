@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../../../app/models/inventory_item.dart';
 
+enum SortType { az, za }
+
 class HomeModel extends ChangeNotifier {
   final Box<InventoryItem> _inventoryBox = Hive.box<InventoryItem>('inventory');
 
@@ -48,12 +50,43 @@ class HomeModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // List<InventoryItem> get filteredItems {
+  //   if (_searchQuery.isEmpty) return items;
+  //   return items.where((item) {
+  //     return item.name.toLowerCase().contains(_searchQuery) ||
+  //         item.description.toLowerCase().contains(_searchQuery);
+  //   }).toList();
+  // }
+
+
+
+  SortType _sortType = SortType.az; // default sort A–Z
+
+  void setSortType(SortType type) {
+  _sortType = type;
+  notifyListeners();
+  }
+
   List<InventoryItem> get filteredItems {
-    if (_searchQuery.isEmpty) return items;
-    return items.where((item) {
-      return item.name.toLowerCase().contains(_searchQuery) ||
-          item.description.toLowerCase().contains(_searchQuery);
-    }).toList();
+    List<InventoryItem> list = items;
+
+    if (_searchQuery.isNotEmpty) {
+      list = list.where((item) {
+        return item.name.toLowerCase().contains(_searchQuery) ||
+            item.description.toLowerCase().contains(_searchQuery);
+      }).toList();
+    }
+
+    // Now apply sorting
+    list.sort((a, b) {
+      if (_sortType == SortType.az) {
+        return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+      } else {
+        return b.name.toLowerCase().compareTo(a.name.toLowerCase());
+      }
+    });
+
+    return list;
   }
 
 

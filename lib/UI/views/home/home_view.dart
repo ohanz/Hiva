@@ -87,6 +87,26 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
                     const SizedBox(height: 20),
+                    Align( // Sort Area
+                      alignment: Alignment.centerRight,
+                      child: PopupMenuButton<SortType>(
+                        onSelected: (value) {
+                          Provider.of<HomeModel>(context, listen: false).setSortType(value);
+                        },
+                        itemBuilder: (_) => const [
+                          PopupMenuItem(
+                            value: SortType.az,
+                            child: Text('Sort A–Z'),
+                          ),
+                          PopupMenuItem(
+                            value: SortType.za,
+                            child: Text('Sort Z–A'),
+                          ),
+                        ],
+                        icon: Icon(Icons.sort),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
                     model.items.isEmpty
                         ? Padding(
                       padding: const EdgeInsets.symmetric(vertical: 50),
