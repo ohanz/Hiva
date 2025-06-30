@@ -87,25 +87,46 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Align( // Sort Area
+                    Align(
                       alignment: Alignment.centerRight,
-                      child: PopupMenuButton<SortType>(
-                        onSelected: (value) {
-                          Provider.of<HomeModel>(context, listen: false).setSortType(value);
+                      child: Consumer<HomeModel>(
+                        builder: (context, model, _) {
+                          final currentSort = model.sortType == SortType.az ? 'A–Z' : 'Z–A';
+
+                          return Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Sort: $currentSort',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey[800],
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              PopupMenuButton<SortType>(
+                                onSelected: (value) {
+                                  model.setSortType(value);
+                                },
+                                itemBuilder: (_) => const [
+                                  PopupMenuItem(
+                                    value: SortType.az,
+                                    child: Text('Sort A–Z'),
+                                  ),
+                                  PopupMenuItem(
+                                    value: SortType.za,
+                                    child: Text('Sort Z–A'),
+                                  ),
+                                ],
+                                icon: const Icon(Icons.sort),
+                              ),
+                            ],
+                          );
                         },
-                        itemBuilder: (_) => const [
-                          PopupMenuItem(
-                            value: SortType.az,
-                            child: Text('Sort A–Z'),
-                          ),
-                          PopupMenuItem(
-                            value: SortType.za,
-                            child: Text('Sort Z–A'),
-                          ),
-                        ],
-                        icon: Icon(Icons.sort),
                       ),
                     ),
+
                     const SizedBox(height: 20),
                     model.items.isEmpty
                         ? Padding(

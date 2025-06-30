@@ -59,8 +59,9 @@ class HomeModel extends ChangeNotifier {
   // }
 
 
+  SortType _sortType = SortType.az; // ✅ Add this line
+  SortType get sortType => _sortType;
 
-  SortType _sortType = SortType.az; // default sort A–Z
 
   void setSortType(SortType type) {
   _sortType = type;
