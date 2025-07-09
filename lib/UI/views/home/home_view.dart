@@ -22,6 +22,7 @@ class _HomeViewState extends State<HomeView> {
   TextEditingController searchController = TextEditingController();
   String selectedCategory = 'General'; // or any default
 
+
   @override
   void initState() {
     super.initState();
@@ -45,6 +46,12 @@ class _HomeViewState extends State<HomeView> {
         final currentSort = model.sortType == SortType.az ? 'A–Z' : 'Z–A';
         final query = model.searchQuery;
 
+        // changed the filtered variable
+        final allItems = model.filteredItems;
+
+        final itemsToShow = selectedCategory == 'General'
+            ? allItems
+            : allItems.where((item) => item.category == selectedCategory).toList();
 
         return Scaffold(
           backgroundColor: Colors.grey[200],
@@ -60,6 +67,29 @@ class _HomeViewState extends State<HomeView> {
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Lato',
+                      ),
+                    ),
+                    // const SizedBox(height: 20),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4.5.width, vertical: 2.height),
+                      child: DropdownButtonFormField<String>(
+                        value: selectedCategory,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedCategory = value!;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Filter by Category',
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        ),
+                        items: ['General', 'Electronics', 'Furniture', 'Books', 'Food'].map((category) {
+                          return DropdownMenuItem<String>(
+                            value: category,
+                            child: Text(category),
+                          );
+                        }).toList(),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -174,12 +204,11 @@ class _HomeViewState extends State<HomeView> {
                         : ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: model.filteredItems.length,
+                      // itemCount: model.filteredItems.length,
+                      itemCount: itemsToShow.length,
                       itemBuilder: (context, index) {
-                        final item = model.filteredItems[index];
-                        // itemCount: model.items.length,
-                      // itemBuilder: (context, index) {
-                      //   final item = model.items[index];
+                        // final item = model.filteredItems[index];
+                        final item = itemsToShow[index];
 
                         return Container(
                           margin: EdgeInsets.symmetric(
@@ -236,7 +265,7 @@ class _HomeViewState extends State<HomeView> {
                                   'Category: ${item.category}',
                                   style: TextStyle(
                                     color: Colors.blueGrey,
-                                    fontSize: 3.8.text,
+                                    fontSize: 2.8.text,
                                     fontStyle: FontStyle.italic,
                                   ),
                                 ),
