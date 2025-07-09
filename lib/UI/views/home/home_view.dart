@@ -231,6 +231,15 @@ class _HomeViewState extends State<HomeView> {
                                         fontSize: 14,
                                       ),
                                     ),
+                                SizedBox(height: 1.height),
+                                Text(
+                                  'Category: ${item.category}',
+                                  style: TextStyle(
+                                    color: Colors.blueGrey,
+                                    fontSize: 3.8.text,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
                                   ],
                                 ),
                               ),
